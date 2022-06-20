@@ -13,7 +13,7 @@ class SettingsCache
 
     private ?string $store;
 
-    public static ?string $prefix;
+    public ?string $prefix;
 
     /** @var \DateTimeInterface|\DateInterval|int|null */
     private $ttl;
@@ -26,7 +26,7 @@ class SettingsCache
     ) {
         $this->enabled = $enabled;
         $this->store = $store;
-        self::$prefix = $prefix;
+        $this->prefix = $prefix;
         $this->ttl = $ttl;
     }
 
@@ -84,9 +84,14 @@ class SettingsCache
             ->pipe(fn (Collection $keys) => Cache::store($this->store)->deleteMultiple($keys));
     }
 
+    public function setPrefix(?string $prefix): void
+    {
+        $this->prefix = $prefix;
+    }
+
     private function resolveCacheKey(string $settingsClass): string
     {
-        $prefix = self::$prefix ? self::$prefix . "." : '';
+        $prefix = $this->prefix ? $this->prefix . "." : '';
 
         return "{$prefix}settings.{$settingsClass}";
     }
