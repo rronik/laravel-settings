@@ -50,7 +50,7 @@ class LaravelSettingsServiceProvider extends ServiceProvider
 
         $this->app->bind(SettingsRepository::class, fn () => SettingsRepositoryFactory::create());
 
-        $this->app->scoped(SettingsCache::class, fn () => new SettingsCache(
+        $this->app->singleton(SettingsCache::class, fn () => new SettingsCache(
             config('settings.cache.enabled', false),
             config('settings.cache.store'),
             config('settings.cache.prefix'),
